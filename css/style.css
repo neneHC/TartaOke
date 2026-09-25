@@ -669,36 +669,6 @@ mark {
   text-decoration: line-through;
 }
 
-/* Importar / Exportar */
-.import-section {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.import-textarea {
-  width: 100%;
-  height: 120px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  padding: 10px;
-  font-family: monospace;
-  font-size: 0.85rem;
-  resize: vertical;
-}
-
-.import-textarea:focus {
-  outline: none;
-  border-color: var(--accent-primary);
-}
-
-.file-input-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 
 /* Instruções e Ajuda */
 .help-box {

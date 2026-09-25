@@ -14,7 +14,6 @@ Um aplicativo web moderno, leve e **otimizado para celular**, desenvolvido para 
 - ⭐ **Fila de Pedidos ("Meus Pedidos")**: Salve as músicas que você e seus amigos querem cantar na noite.
 - 📲 **Compartilhar Pedidos no WhatsApp**: Envie a lista formatada com códigos e nomes diretamente para o grupo ou para quem estiver operando a máquina.
 - 📴 **Funciona 100% Offline (PWA)**: Pode ser instalado na tela inicial do celular como um aplicativo e funciona mesmo em bares subterrâneos sem sinal de internet!
-- ⚙️ **Importar / Exportar Catálogo**: Permite exportar para CSV/Excel ou importar novos repertórios a qualquer momento.
 
 ---
 
@@ -70,45 +69,19 @@ O TartaOke conta com tecnologia PWA (Progressive Web App). Ao ser instalado, ele
 
 ```text
 TartaOke/
-├── index.html           # Interface principal (layout responsivo e acessível)
-├── manifest.json        # Configuração do PWA (ícones, cores, tela cheia)
-├── sw.js                # Service Worker para funcionamento 100% offline
+├── index.html              # Interface simplificada, rápida e mobile-first
+├── manifest.json           # Configuração do PWA (ícones, cores, tela cheia)
+├── sw.js                   # Service Worker para funcionamento 100% offline
 ├── css/
-│   └── style.css        # Estilos mobile-first com tema escuro de alto contraste
+│   └── style.css           # Estilos mobile-first com tema escuro de alto contraste
 ├── js/
-│   ├── app.js           # Lógica de busca rápida, filtros, cópia e fila
-│   └── data.js          # Banco inicial de músicas (mais de 300 sucessos)
+│   ├── app.js              # Mecanismo de busca rápida, filtros, cópia e fila
+│   └── data.js             # Catálogo universal KaraokêBox (~13.000 músicas)
 ├── data/
-│   └── songs.json       # Dados em formato JSON padrão
+│   └── songs.json          # Banco completo em formato JSON
 ├── icons/
-│   ├── icon.svg         # Ícone vetorial do microfone neon
-│   ├── icon-192.png     # Ícone para Android / PWA
-│   └── icon-512.png     # Ícone em alta resolução
-└── build_database.py    # Script utilitário em Python para gerar/atualizar o catálogo
+│   ├── icon.svg            # Ícone vetorial do microfone neon
+│   ├── icon-192.png        # Ícone para Android / PWA
+│   └── icon-512.png        # Ícone em alta resolução
+└── process_karaokebox.py   # Script utilitário em Python para processar novos catálogos
 ```
-
----
-
-## 🛠️ Como Adicionar / Personalizar Músicas
-
-Você tem duas formas fáceis de alterar as músicas:
-
-### Opção 1: Pelo próprio site (Sem mexer em código)
-1. Abra o site no celular ou computador.
-2. Toque no ícone de **⚙️ (Configurações)** no cabeçalho.
-3. Você pode:
-   - Exportar o catálogo atual em **CSV** para editar no Excel ou Google Planilhas.
-   - Enviar seu próprio arquivo CSV ou colar o texto com suas músicas.
-   - Restaurar as músicas originais a qualquer momento.
-
-### Opção 2: Pelo arquivo `build_database.py` ou `data/songs.json`
-Edite a lista no arquivo `build_database.py` e rode:
-
-```bash
-python3 build_database.py
-git add .
-git commit -m "Atualizando catálogo de músicas"
-git push
-```
-
-O GitHub Pages atualizará o site automaticamente!

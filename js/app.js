@@ -30,24 +30,13 @@
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toastMessage');
 
-  // Modais
+  // Modal da Fila
   const queueModal = document.getElementById('queueModal');
-  const settingsModal = document.getElementById('settingsModal');
-  const btnSettings = document.getElementById('btnSettings');
   const btnCloseQueue = document.getElementById('btnCloseQueue');
-  const btnCloseSettings = document.getElementById('btnCloseSettings');
   const queueItemsContainer = document.getElementById('queueItemsContainer');
   const btnShareQueue = document.getElementById('btnShareQueue');
   const btnClearQueue = document.getElementById('btnClearQueue');
   const btnInstallApp = document.getElementById('btnInstallApp');
-
-  // Configuração & Importação
-  const btnExportJson = document.getElementById('btnExportJson');
-  const btnExportCsv = document.getElementById('btnExportCsv');
-  const btnImport = document.getElementById('btnImport');
-  const importTextarea = document.getElementById('importTextarea');
-  const importFileInput = document.getElementById('importFileInput');
-  const btnResetCatalog = document.getElementById('btnResetCatalog');
 
   // --- Funções Utilitárias ---
 
@@ -433,108 +422,6 @@
     queueItemsContainer.innerHTML = html;
   }
 
-  // --- Importação / Exportação do Catálogo ---
-
-  function exportCatalogAsJson() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.allSongs, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `catalogo_karaoke_${new Date().toISOString().slice(0, 10)}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-    showToast("Catálogo baixado em JSON!");
-  }
-
-  function exportCatalogAsCsv() {
-    let csv = "codigo,titulo,artista,inicio_da_letra,categoria\n";
-    state.allSongs.forEach(s => {
-      const row = [
-        `"${(s.code || '').replace(/"/g, '""')}"`,
-        `"${(s.title || '').replace(/"/g, '""')}"`,
-        `"${(s.artist || '').replace(/"/g, '""')}"`,
-        `"${(s.lyrics || '').replace(/"/g, '""')}"`,
-        `"${(s.category || 'nacional').replace(/"/g, '""')}"`
-      ];
-      csv += row.join(",") + "\n";
-    });
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `catalogo_karaoke_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    showToast("Catálogo baixado em CSV!");
-  }
-
-  function parseCsv(text) {
-    const lines = text.trim().split(/\r?\n/);
-    if (lines.length < 2) return [];
-
-    const songs = [];
-    // Pular cabeçalho se houver
-    const startIndex = lines[0].toLowerCase().includes('titulo') || lines[0].toLowerCase().includes('codigo') ? 1 : 0;
-
-    for (let i = startIndex; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
-
-      // Divisão simples respeitando aspas ou ponto e vírgula / vírgula
-      const delimiter = line.includes(';') ? ';' : ',';
-      const parts = line.split(delimiter).map(p => p.trim().replace(/^["']|["']$/g, ''));
-
-      if (parts.length >= 2) {
-        songs.push({
-          code: parts[0] || '',
-          title: parts[1] || '',
-          artist: parts[2] || '',
-          lyrics: parts[3] || '',
-          category: parts[4] ? parts[4].toLowerCase() : 'nacional'
-        });
-      }
-    }
-    return songs;
-  }
-
-  function handleImportText(content) {
-    try {
-      content = content.trim();
-      let importedSongs = [];
-
-      if (content.startsWith('[') || content.startsWith('{')) {
-        const parsed = JSON.parse(content);
-        importedSongs = Array.isArray(parsed) ? parsed : [parsed];
-      } else {
-        importedSongs = parseCsv(content);
-      }
-
-      if (importedSongs.length === 0) {
-        alert("Nenhuma música válida foi encontrada para importar.");
-        return;
-      }
-
-      const formatted = importedSongs.map(s => ({
-        code: (s.code || s.numero || s.id || '').toString(),
-        title: s.title || s.titulo || s.musica || 'Sem Título',
-        artist: s.artist || s.artista || s.cantor || 'Desconhecido',
-        lyrics: s.lyrics || s.letra || s.inicio || '',
-        category: (s.category || s.categoria || 'nacional').toLowerCase()
-      }));
-
-      // Salvar
-      localStorage.setItem('tartaoke_custom_catalog', JSON.stringify(formatted));
-      state.allSongs = formatted.map(indexSong);
-      applyFilters();
-      settingsModal.classList.remove('active');
-      showToast(`Sucesso! ${formatted.length} músicas importadas.`);
-    } catch (err) {
-      alert("Erro ao importar: " + err.message);
-    }
-  }
-
   // --- Event Listeners ---
 
   // Busca em tempo real com debounce suave
@@ -666,56 +553,10 @@
     }
   });
 
-  // Modal de Configurações
-  btnSettings.addEventListener('click', () => {
-    settingsModal.classList.add('active');
-  });
-
-  btnCloseSettings.addEventListener('click', () => {
-    settingsModal.classList.remove('active');
-  });
-
-  // Fechar modais ao clicar no overlay
-  [queueModal, settingsModal].forEach(modal => {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-      }
-    });
-  });
-
-  // Exportações
-  btnExportJson.addEventListener('click', exportCatalogAsJson);
-  btnExportCsv.addEventListener('click', exportCatalogAsCsv);
-
-  // Importações
-  btnImport.addEventListener('click', () => {
-    const text = importTextarea.value;
-    if (!text.trim()) {
-      alert("Cole os dados no formato CSV ou JSON na caixa de texto.");
-      return;
-    }
-    handleImportText(text);
-  });
-
-  importFileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      handleImportText(event.target.result);
-      importFileInput.value = '';
-    };
-    reader.readAsText(file);
-  });
-
-  btnResetCatalog.addEventListener('click', () => {
-    if (confirm("Tem certeza que deseja restaurar o catálogo padrão de músicas? Qualquer importação anterior será substituída.")) {
-      localStorage.removeItem('tartaoke_custom_catalog');
-      loadSongsCatalog();
-      settingsModal.classList.remove('active');
-      showToast("Catálogo padrão restaurado!");
+  // Fechar modal da fila ao clicar no overlay
+  queueModal.addEventListener('click', (e) => {
+    if (e.target === queueModal) {
+      queueModal.classList.remove('active');
     }
   });
 

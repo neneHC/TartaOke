@@ -48,14 +48,6 @@
             </svg>
             <span id="queueBadge" class="badge-counter" style="display: none;">0</span>
           </button>
-
-          <!-- Botão Catálogo / Configurações -->
-          <button id="btnSettings" class="btn-icon" title="Opções do Catálogo" aria-label="Opções do Catálogo">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-          </button>
         </div>
       </div>
 
@@ -143,68 +135,6 @@
         <button id="btnShareQueue" class="btn-modal btn-modal-primary">
           📲 Compartilhar Fila
         </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Configurações & Catálogo -->
-  <div id="settingsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 id="settingsModalTitle" class="modal-title">
-          <span>⚙️</span> Catálogo de Músicas
-        </h2>
-        <button id="btnCloseSettings" class="btn-action" title="Fechar" aria-label="Fechar">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="import-section">
-          <div>
-            <h3 style="font-size: 0.95rem; margin-bottom: 6px; color: #fff;">Backup e Exportação</h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">
-              Baixe as músicas cadastradas para salvar ou editar em planilhas (Excel, Google Sheets).
-            </p>
-            <div style="display: flex; gap: 8px;">
-              <button id="btnExportCsv" class="btn-modal btn-modal-secondary" style="flex: 1; justify-content: center;">
-                📊 Baixar CSV
-              </button>
-              <button id="btnExportJson" class="btn-modal btn-modal-secondary" style="flex: 1; justify-content: center;">
-                📄 Baixar JSON
-              </button>
-            </div>
-          </div>
-
-          <hr style="border: none; border-top: 1px solid var(--border-color); margin: 8px 0;">
-
-          <div>
-            <h3 style="font-size: 0.95rem; margin-bottom: 6px; color: #fff;">Importar Catálogo Próprio</h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px;">
-              Tem a lista da sua máquina específica? Envie um arquivo CSV ou cole o texto no formato <code>código, música, artista, letra, categoria</code>:
-            </p>
-            <textarea id="importTextarea" class="import-textarea" placeholder="Exemplo:&#10;1234,Evidências,Chitãozinho &amp; Xororó,Quando eu digo que...,nacional&#10;5678,Bohemian Rhapsody,Queen,Is this the real...,internacional"></textarea>
-            
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-              <input type="file" id="importFileInput" accept=".csv,.json" style="display: none;">
-              <button onclick="document.getElementById('importFileInput').click()" class="btn-modal btn-modal-secondary" style="flex: 1; justify-content: center;">
-                📁 Enviar Arquivo (.csv / .json)
-              </button>
-              <button id="btnImport" class="btn-modal btn-modal-primary" style="flex: 1; justify-content: center;">
-                📥 Importar
-              </button>
-            </div>
-          </div>
-
-          <hr style="border: none; border-top: 1px solid var(--border-color); margin: 8px 0;">
-
-          <div>
-            <h3 style="font-size: 0.95rem; margin-bottom: 6px; color: #fff;">Restaurar Padrão</h3>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px;">
-              Restaura a lista original com os clássicos nacionais e internacionais.
-            </p>
-            <button id="btnResetCatalog" class="btn-modal btn-modal-secondary" style="color: #f87171; border-color: rgba(239, 68, 68, 0.3);">
-              🔄 Restaurar Catálogo Padrão
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
