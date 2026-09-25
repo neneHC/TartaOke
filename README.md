@@ -6,14 +6,15 @@ Um aplicativo web moderno, leve e **otimizado para celular**, desenvolvido para 
 
 ## ✨ Principais Funcionalidades
 
+- 📚 **Catálogo Completo (~13.000 Músicas)**: Base oficial extraída do catálogo universal de karaokê (KaraokêBox / Videokê), com numeração padrão universal utilizada nos principais aparelhos e bares do Brasil.
 - ⚡ **Busca Instantânea**: Digite qualquer parte do nome da música, artista ou número e os resultados aparecem em tempo real (< 10ms).
-- 🔤 **Insensível a Acentos**: Pesquise por `evidencias`, `legiao`, `chitaozinho` ou `voce` sem se preocupar com acentuação ou maiúsculas/minúsculas.
+- 🔤 **Insensível a Acentos e Plurais**: Pesquise por `evidencias` ou `evidencia`, `legiao`, `chitaozinho`, com ou sem acentos e plurais.
 - 📱 **Mobile-First**: Layout projetado especificamente para telas de smartphones, com botões acessíveis e alto contraste para ambientes escuros de karaokê.
 - 📋 **Toque para Copiar**: Basta tocar no card ou no número da música para copiar o código para a área de transferência.
 - ⭐ **Fila de Pedidos ("Meus Pedidos")**: Salve as músicas que você e seus amigos querem cantar na noite.
 - 📲 **Compartilhar Pedidos no WhatsApp**: Envie a lista formatada com códigos e nomes diretamente para o grupo ou para quem estiver operando a máquina.
 - 📴 **Funciona 100% Offline (PWA)**: Pode ser instalado na tela inicial do celular como um aplicativo e funciona mesmo em bares subterrâneos sem sinal de internet!
-- ⚙️ **Importar / Exportar Catálogo**: Adicione ou substitua as músicas facilmente enviando um arquivo CSV/Excel ou colando a lista da sua máquina.
+- ⚙️ **Importar / Exportar Catálogo**: Permite exportar para CSV/Excel ou importar novos repertórios a qualquer momento.
 
 ---
 

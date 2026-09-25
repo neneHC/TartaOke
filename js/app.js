@@ -187,9 +187,17 @@
       }
     }
 
-    // 2. Se não houver customizado, usar o banco padrão embutido em window.DEFAULT_SONGS
+    // 2. Usar o catálogo KaraokêBox / Videokê embutido em window.COMPACT_SONGS
     if (!rawSongs || rawSongs.length === 0) {
-      if (window.DEFAULT_SONGS && Array.isArray(window.DEFAULT_SONGS)) {
+      if (window.COMPACT_SONGS && Array.isArray(window.COMPACT_SONGS)) {
+        rawSongs = window.COMPACT_SONGS.map(item => ({
+          code: item[0],
+          title: item[1],
+          artist: item[2],
+          lyrics: item[3] || '',
+          category: item[4] || 'nacional'
+        }));
+      } else if (window.DEFAULT_SONGS && Array.isArray(window.DEFAULT_SONGS)) {
         rawSongs = window.DEFAULT_SONGS;
       } else {
         // Fallback: tentar fetch do data/songs.json
@@ -221,6 +229,8 @@
       list = list.filter(s => s.category === 'nacional');
     } else if (state.activeCategory === 'internacional') {
       list = list.filter(s => s.category === 'internacional');
+    } else if (state.activeCategory === 'japonesa') {
+      list = list.filter(s => s.category === 'japonesa');
     } else if (state.activeCategory === 'queue') {
       const queueCodes = new Set(state.queue.map(q => q.code));
       list = list.filter(s => queueCodes.has(s.code));
@@ -231,7 +241,13 @@
       list = list
         .map(song => {
           // Todas as palavras digitadas precisam estar no cadastro da música
-          const matchesAll = queryTerms.every(term => song._fullSearchText.includes(term));
+          const matchesAll = queryTerms.every(term => {
+            if (song._fullSearchText.includes(term)) return true;
+            // Flexibilidade para plurais e singulares (ex: evidencias -> evidencia)
+            if (term.endsWith('s') && term.length > 3 && song._fullSearchText.includes(term.slice(0, -1))) return true;
+            if (!term.endsWith('s') && term.length > 3 && song._fullSearchText.includes(term + 's')) return true;
+            return false;
+          });
           if (!matchesAll) return null;
 
           // Cálculo de Relevância
@@ -243,18 +259,27 @@
             score += 500;
           }
 
-          // Match no início do título
-          if (song._titleNorm.startsWith(queryNorm)) {
+          // Match no título
+          if (song._titleNorm === queryNorm) {
+            score += 400;
+          } else if (song._titleNorm.startsWith(queryNorm)) {
             score += 300;
           } else if (song._titleNorm.includes(queryNorm)) {
             score += 150;
           }
 
           // Match no artista
-          if (song._artistNorm.startsWith(queryNorm)) {
+          if (song._artistNorm === queryNorm) {
+            score += 250;
+          } else if (song._artistNorm.startsWith(queryNorm)) {
             score += 200;
           } else if (song._artistNorm.includes(queryNorm)) {
             score += 100;
+          }
+
+          // Match no início da letra
+          if (song._lyricsNorm && song._lyricsNorm.includes(queryNorm)) {
+            score += 50;
           }
 
           return { song, score };
