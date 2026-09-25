@@ -1,0 +1,81 @@
+name: Build & Release Android APK
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  release:
+    types: [published, created]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag de Versão para a Release (ex: v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Compilar APK Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar Código do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Configurar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Dar Permissão de Execução ao Gradle
+        run: chmod +x android/gradlew
+
+      - name: Compilar APK de Release (Assinado)
+        run: |
+          cd android
+          ./gradlew assembleRelease --no-daemon
+
+      - name: Renomear APK Gerado
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk TartaOke.apk
+          echo "APK gerado com sucesso: TartaOke.apk"
+          ls -lh TartaOke.apk
+
+      - name: Salvar APK como Artefato do Workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: TartaOke-APK
+          path: TartaOke.apk
+          retention-days: 30
+
+      - name: Publicar APK no GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        with:
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          name: TartaOke Karaokê - Versão ${{ github.event.inputs.tag_name || github.ref_name }}
+          files: TartaOke.apk
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ## 🎤 TartaOke - Aplicativo Android (.apk)
+            
+            Baixe o arquivo **`TartaOke.apk`** abaixo para instalar o catálogo de karaokê diretamente no seu celular Android.
+            
+            ### ✨ O que está incluído:
+            - **100% Offline**: Catálogo completo de quase 13.000 músicas do KaraokêBox/Videokê embutido no aplicativo (não precisa de internet).
+            - **Busca Instantânea**: Pesquise por música, artista ou número com resposta imediata.
+            - **Toque para Copiar**: Toque em qualquer música para copiar o código para a área de transferência.
+            - **Fila de Pedidos**: Marque músicas com estrela para montar a lista da noite.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

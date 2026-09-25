@@ -49,9 +49,33 @@ git push -u origin main
 
 ---
 
-## 📲 Como Instalar no Celular como Aplicativo (PWA)
+## 🤖 Como Baixar e Gerar o APK (Android) em Releases
 
-O TartaOke conta com tecnologia PWA (Progressive Web App). Ao ser instalado, ele abre sem as barras do navegador, em tela cheia, como um app nativo:
+O projeto inclui um **GitHub Actions** automatizado que compila e publica o arquivo **`TartaOke.apk`** diretamente na aba **Releases** do seu repositório!
+
+### 📥 Como Baixar o APK:
+1. No seu repositório no GitHub, clique na seção **Releases** (ou acesse `https://github.com/SEU-USUARIO/tartaoke/releases`).
+2. Clique no arquivo **`TartaOke.apk`** em *Assets* para baixar e instalar diretamente no seu celular Android.
+
+### ⚙️ Como Gerar uma Nova Versão do APK:
+Você tem duas formas simples:
+
+- **Opção 1 (Via Git Tag - Recomendado)**:
+  Basta criar e enviar uma tag com a versão:
+  ```bash
+  git tag v1.0.0
+  git push origin v1.0.0
+  ```
+  O GitHub Actions compilará o APK e criará a Release automaticamente em ~1 minuto!
+
+- **Opção 2 (Via Painel do GitHub)**:
+  Acesse a aba **Actions** no seu repositório > selecione **"Build & Release Android APK"** > clique em **"Run workflow"**.
+
+---
+
+## 📲 Como Instalar no Celular como Web App (PWA)
+
+Além do APK, você também pode usar como PWA (Progressive Web App) diretamente pelo navegador sem precisar instalar arquivo APK:
 
 ### No Android (Google Chrome):
 1. Acesse o link do seu site pelo Chrome no celular.
